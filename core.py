@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, abort
 from linebot.v3 import (
     WebhookHandler
@@ -24,8 +25,8 @@ config.read('config.ini')
 
 app = Flask(__name__)
 
-configuration = Configuration(access_token=config['MessagingAPI']['token'])
-handler = WebhookHandler(config['MessagingAPI']['secret'])
+configuration = Configuration(access_token=os.environ['API_TOKEN'])
+handler = WebhookHandler(os.environ['API_SECRET'])
 
 @app.route("/callback", methods=['POST'])
 def callback():
