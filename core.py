@@ -30,6 +30,7 @@ handler = WebhookHandler(os.environ['API_SECRET'])
 
 @app.route("/callback", methods=['POST'])
 def callback():
+    # 署名の検証 --------------------------------------
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
 
@@ -41,10 +42,11 @@ def callback():
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
-        app.logger.info("Invalid signature. Please check your channel access token/channel secret.")
+        app.logger.info("Invalid signature. ")
         abort(400)
 
     return 'OK'
+    # -------------------------------------------------
 
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
@@ -53,7 +55,7 @@ def handle_message(event):
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
                 reply_token=event.reply_token,
-                messages=[TextMessage(text=event.message.text)]
+                messages=[TextMessage(text=f"Received message!!\n{event.message.text}")]
             )
         )
 
