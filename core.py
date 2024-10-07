@@ -35,6 +35,7 @@ def access_root():
 
 @app.route("/callback", methods=['POST'])
 def callback():
+    print("start callback", flush=True)
     signature = request.headers['X-Line-Signature']
     
     body = request.get_data(as_text=True)

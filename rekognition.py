@@ -24,7 +24,7 @@ def put_to_s3_storage(src_img_path, key_name):
         
     return destination_key
   except Exception as e:
-    print(e.message)
+    print(e.messag, flush=True)
     return "err"
 
 
@@ -57,6 +57,6 @@ def detect_object_by_rekognition():
 
     return callback_text
   except Exception as e:
-    print(e.message)
+    print(e.message, flush=True)
     return "err"
     
