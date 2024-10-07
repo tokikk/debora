@@ -16,7 +16,8 @@ from linebot.v3.messaging import (
 )
 from linebot.v3.webhooks import (
     MessageEvent,
-    TextMessageContent
+    TextMessageContent,
+    ImageMessageContent
 )
 import rekognition
 
@@ -62,7 +63,7 @@ def handle_message(event):
             )
         )
         
-@handler.add(MessageEvent, message=ImageMessage)
+@handler.add(MessageEvent, message=ImageMessageContent)
 def handle_message(event):
     try:
         print("handle ImageMessage", flush=True)
