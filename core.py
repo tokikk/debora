@@ -71,7 +71,8 @@ def handle_message(event):
             line_bot_api = MessagingApi(api_client)
             line_bot_blob_api = MessagingApiBlob(api_client)        
             message_content = line_bot_blob_api.get_message_content(event.message.id)
-            img_path = rf"./image/tmp_{key_name}.png"
+            os.makedirs("image", exist_ok=True)
+            img_path = rf"image/tmp_{key_name}.png"
             with open(img_path, "wb") as f:
                 for chunk in message_content.iter_content():
                     f.write(chunk)
