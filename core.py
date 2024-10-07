@@ -1,4 +1,4 @@
-import os, datetime
+import os, datetime, tempfile
 from flask import Flask, request, abort
 from linebot.v3 import (
     WebhookHandler
@@ -27,6 +27,7 @@ app = Flask(__name__)
 configuration = Configuration(access_token=os.environ['API_TOKEN'])
 handler = WebhookHandler(os.environ['API_SECRET'])
 key_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
+static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
 
 @app.route('/')
@@ -71,13 +72,11 @@ def handle_message(event):
             line_bot_api = MessagingApi(api_client)
             line_bot_blob_api = MessagingApiBlob(api_client)        
             message_content = line_bot_blob_api.get_message_content(event.message.id)
-            os.makedirs("image", exist_ok=True)
-            img_path = rf"image/tmp_{key_name}.png"
-            with open(img_path, "wb") as f:
-                for chunk in message_content.iter_content():
-                    f.write(chunk)
-        
-            destination_key = rekognition.put_to_s3_storage(img_path, key_name)
+            os.makedirs(static_tmp_path, exist_ok=True)
+            with tempfile.NamedTemporaryFile(dir=static_tmp_path) as tf:
+                tf.write(message_content)
+                destination_key = rekognition.put_to_s3_storage(tf.name , key_name)
+                
             if destination_key == 'err': 
                 callback_text = 'S3ストレージへの画像の保存に失敗しました'
             else:
