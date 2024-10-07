@@ -40,7 +40,7 @@ def detect_object_by_rekognition():
     callback_text = ""
     response = client.detect_labels(Image={'S3Object':{'Bucket':target_bucket_name,'Name':'00.jpg'}}, MaxLabels=10)
     for label in response['Labels']:
-        callback_text = f"Label: {label['Name']}\n"
+        callback_text += f"Label: {label['Name']}\n"
         callback_text += f"Confidence: {str(label['Confidence'])}\n"
         callback_text += "Instances:\n"
         for instance in label['Instances']:
