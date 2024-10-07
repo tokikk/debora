@@ -12,7 +12,7 @@ from linebot.v3.messaging import (
     MessagingApi,
     ReplyMessageRequest,
     TextMessage,
-    ImageMessage
+    MessagingApiBlob
 )
 from linebot.v3.webhooks import (
     MessageEvent,
@@ -70,7 +70,7 @@ def handle_message(event):
         with ApiClient(configuration) as api_client:  
             line_bot_api = MessagingApi(api_client)
         
-            message_content = line_bot_api.get_message_content(event.message.id )
+            message_content = line_bot_api.get_message_content(event.message.id)
             img_path = rf"./image/tmp_{key_name}.png"
             with open(img_path, "wb") as f:
                 for chunk in message_content.iter_content():
