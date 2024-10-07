@@ -52,6 +52,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
+    print("hendle TextMessageContent", flush=True)
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)
         line_bot_api.reply_message_with_http_info(
@@ -64,6 +65,7 @@ def handle_message(event):
 @handler.add(MessageEvent, message=ImageMessage)
 def handle_message(event):
     try:
+        print("handle ImageMessage", flush=True)
         with ApiClient(configuration) as api_client:  
             line_bot_api = MessagingApi(api_client)
         
