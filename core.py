@@ -36,7 +36,7 @@ def access_root():
 
 
 @app.route('/check')
-def access_root():
+def check():
     return 'OK'
 
 
