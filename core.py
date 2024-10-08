@@ -35,6 +35,11 @@ def access_root():
     return 'You are trying to access the root directory'
 
 
+@app.route('/check')
+def access_root():
+    return 'OK'
+
+
 @app.route("/callback", methods=['POST'])
 def callback():
     print("start callback", flush=True)
