@@ -1,4 +1,4 @@
-import os, datetime, tempfile, random
+import os, datetime, tempfile
 from flask import Flask, request, abort
 from linebot.v3 import (
     WebhookHandler
@@ -78,32 +78,25 @@ def handle_message(event):
             line_bot_api = MessagingApi(api_client)
             line_bot_blob_api = MessagingApiBlob(api_client)        
             message_content = line_bot_blob_api.get_message_content(event.message.id)
-
-            # os.makedirs(static_tmp_path, exist_ok=True)
-            # with tempfile.NamedTemporaryFile(dir=static_tmp_path) as tf:
-            #     tf.write(message_content)
-            #     destination_key = rekognition.put_to_s3_storage(tf.name , key_name)
+            os.makedirs(static_tmp_path, exist_ok=True)
+            with tempfile.NamedTemporaryFile(dir=static_tmp_path) as tf:
+                tf.write(message_content)
+                destination_key = rekognition.put_to_s3_storage(tf.name , key_name)
                 
-            #     if destination_key == 'err': 
-            #         callback_text = 'S3ストレージへの画像の保存に失敗しました'
-            #     else:
-            #         callback = rekognition.detect_object_by_rekognition(static_tmp_path)
-            #         if callback['text'] == 'err':
-            #             callback_text = 'Rekognitionによるラベル検出に失敗しました'
-            #         else:
-            #             rekognition.put_to_s3_storage(callback['img'], key_name)
-           
-            num = random.randrange(11)
-            if num % 2 == 0:
-                image_url = "https://drive.google.com/file/d/1ZhMEONjYnvtKhkk_RF9QKo5Y3oxDL8eo/view?usp=drive_link"
-            else:
-                image_url = "https://drive.google.com/file/d/14NpMx1VrjjhZ5CE0s_Cx2xTKn3pJozNp/view?usp=drive_link"
-
+                if destination_key == 'err': 
+                    callback_text = 'S3ストレージへの画像の保存に失敗しました'
+                else:
+                    callback = rekognition.detect_object_by_rekognition(static_tmp_path)
+                    if callback['text'] == 'err':
+                        callback_text = 'Rekognitionによるラベル検出に失敗しました'
+                    else:
+                        rekognition.put_to_s3_storage(callback['img'], key_name)
+            
             line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    messages=[TextMessage(text=f"画像メッセージを受信！！"),
-                              ImageMessage(originalContentUrl=image_url)]
+                    messages=[TextMessage(text=f"画像メッセージを受信！！\n{callback_text}"),
+                              ImageMessage()]
                 )
             )
     except Exception as e:
