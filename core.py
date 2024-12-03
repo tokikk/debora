@@ -103,7 +103,7 @@ def handle_message(event):
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
                     messages=[TextMessage(text=f"画像メッセージを受信！！"),
-                              ImageMessage(type= "image", originalContentUrl=image_url)]
+                              ImageMessage(type= "image", originalContentUrl=image_url, previewImageUrl=image_url)]
                 )
             )
     except Exception as e:
