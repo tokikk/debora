@@ -58,7 +58,7 @@ def detect_object_by_rekognition(result_img_path):
                            instance['BoundingBox']['Height'] * img.height,
                            instance['BoundingBox']['Width'] * img.width,
                            outline=(255, 0, 0), width=4)
-            saved_path = os.path.join(rf'{result_img_path}', rf'result_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.jpg')
+            saved_path = os.path.join(rf"{result_img_path}", rf"result_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}.jpg")
             img.save(saved_path)
 
         callback_text += f"Parents:\n"
