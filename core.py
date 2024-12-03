@@ -95,9 +95,9 @@ def handle_message(event):
            
             num = random.randrange(11)
             if num % 2 == 0:
-                image_url = "https://drive.google.com/file/d/1ZhMEONjYnvtKhkk_RF9QKo5Y3oxDL8eo/view?usp=drive_link"
+                image_url = "https://sparkly-mochi-d0e122.netlify.app/azarashi.png"
             else:
-                image_url = "https://drive.google.com/file/d/14NpMx1VrjjhZ5CE0s_Cx2xTKn3pJozNp/view?usp=drive_link"
+                image_url = "https://sparkly-mochi-d0e122.netlify.app/penguin.png"
 
             line_bot_api.reply_message_with_http_info(
                 ReplyMessageRequest(
