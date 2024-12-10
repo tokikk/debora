@@ -1,4 +1,4 @@
-import os, datetime, tempfile, random
+import os, datetime, tempfile, random, textwrap
 from flask import Flask, request, abort
 from linebot.v3 import (
     WebhookHandler
@@ -30,6 +30,24 @@ handler = WebhookHandler(os.environ['API_SECRET'])
 key_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S%f')
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
+# Message template
+room1_msg1 = textwrap.dedent('''
+    チェックが完了しました。
+    転倒対策が必要な家具を発見しました。
+    　No.1 テレビ
+    　No.2 ランプ
+    ''')
+room1_msg2 = textwrap.dedent('''
+    １．大型家具のテレビは転倒すると下敷きになってしまったり、
+    割れた破片で怪我をする可能性があるため、優先的に対策しましょう。
+    耐震ベルトと耐震マットでの固定をおすすめします。
+    https://item.rakuten.co.jp/yukaiya/10001149/
+    ''')
+room1_msg3 = textwrap.dedent('''
+    ２．高所にあるランプは落下すると危険です。
+    耐震ジェルもしくは耐震マットで固定しましょう。
+    https://item.rakuten.co.jp/firn/zt-4508-2/
+    ''')
 
 @app.route('/')
 def access_root():
@@ -61,12 +79,30 @@ def callback():
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
     print("hendle TextMessageContent", flush=True)
+    
+    if event.message.text == "sample1":
+        image_url = "https://cool-heliotrope-f8f19e.netlify.app/room1_drw.png"
+        msgs = [ImageMessage(type= "image", originalContentUrl=image_url, previewImageUrl=image_url),
+                TextMessage(text=room1_msg1),
+                TextMessage(text=room1_msg2),
+                TextMessage(text=room1_msg3)]
+    elif event.message.text == "sample2":
+        image_url = "https://cool-heliotrope-f8f19e.netlify.app/room2_drw.png"
+        msgs = [ImageMessage(type= "image", originalContentUrl=image_url, previewImageUrl=image_url),
+                TextMessage(text=f"画像メッセージを受信！！")]
+    elif event.message.text == 'sample3':
+        image_url = "https://cool-heliotrope-f8f19e.netlify.app/room3_drw.png"
+        msgs = [ImageMessage(type= "image", originalContentUrl=image_url, previewImageUrl=image_url),
+                TextMessage(text=f"画像メッセージを受信！！")]
+    
+    
+    
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
                 reply_token=event.reply_token,
-                messages=[TextMessage(text=f"テキストメッセージを受信！！\n{event.message.text}")]
+                messages=msgs
             )
         )
         
