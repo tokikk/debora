@@ -32,12 +32,13 @@ static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
 # Message template
 room1_msg1 = textwrap.dedent('''
+    ''')
+room1_msg2 = textwrap.dedent('''
     チェックが完了しました。
     転倒対策が必要な家具を発見しました。
     　No.1 テレビ
     　No.2 ランプ
-    ''')
-room1_msg2 = textwrap.dedent('''
+     
     【No.1】大型家具のテレビは転倒すると下敷きになってしまったり、
     割れた破片で怪我をする可能性があるため、優先的に対策しましょう。
     耐震ベルトと耐震マットでの固定をおすすめします。
@@ -49,13 +50,14 @@ room1_msg3 = textwrap.dedent('''
     https://item.rakuten.co.jp/firn/zt-4508-2/
     ''')
 room2_msg1 = textwrap.dedent('''
+    ''')
+room2_msg2 = textwrap.dedent('''
     チェックが完了しました。
     転倒対策が必要な家具を発見しました。
     　No.1 本棚
     　No.2 ベット際の観葉植物
     　No.3 本棚の上の観葉植物
-    ''')
-room2_msg2 = textwrap.dedent('''
+     
     【No.1】大型家具の本棚は転倒すると下敷きになってしまったり、
     収納した本が落下して怪我をする可能性があるため、優先的に対策しましょう。
     ストッパーで固定して、落下抑制テープで本が落ちないようにしましょう。
@@ -72,13 +74,14 @@ room2_msg4 = textwrap.dedent('''
     低地への配置変更をおすすめします。
     ''')
 room3_msg1 = textwrap.dedent('''
+    ''')
+room3_msg2 = textwrap.dedent('''
     チェックが完了しました。
     転倒対策が必要な家具を発見しました。
     　No.1 本棚
     　No.2 本棚の上の観葉植物
     　No.3 デスクライト
-    ''')
-room3_msg2 = textwrap.dedent('''
+     
     【No.1】ベッド際の大型家具の本棚は転倒すると下敷きになってしまったり、
     収納した本が落下して怪我をする可能性があるため、大変危険です。
     可能な場合は、ベッドから離れた場所への配置変更し、
@@ -131,26 +134,23 @@ def handle_message(event):
     if event.message.text == "exec sample1":
         image_url = "https://cool-heliotrope-f8f19e.netlify.app/room1_drw.png"
         msgs = [ImageMessage(type= "image", originalContentUrl=image_url, previewImageUrl=image_url),
-                TextMessage(text=room1_msg1),
                 TextMessage(text=room1_msg2),
                 TextMessage(text=room1_msg3)]
     elif event.message.text == "exec sample2":
         image_url = "https://cool-heliotrope-f8f19e.netlify.app/room2_drw.png"
         msgs = [ImageMessage(type= "image", originalContentUrl=image_url, previewImageUrl=image_url),
-                TextMessage(text=room2_msg1),
                 TextMessage(text=room2_msg2),
                 TextMessage(text=room2_msg3),
                 TextMessage(text=room2_msg4)]
     elif event.message.text == 'exec sample3':
         image_url = "https://cool-heliotrope-f8f19e.netlify.app/room3_drw.png"
         msgs = [ImageMessage(type= "image", originalContentUrl=image_url, previewImageUrl=image_url),
-                TextMessage(text=room3_msg1),
                 TextMessage(text=room3_msg2),
                 TextMessage(text=room3_msg3),
                 TextMessage(text=room3_msg4)]
     else:
         return 0
-    # msgs.append(TextMessage(text="よろしければ簡単なアンケートにご協力下さい\nhttps://forms.office.com/r/Q3GpxM0YeM"))
+    msgs.append(TextMessage(text="よろしければ簡単なアンケートにご協力下さい\nhttps://forms.office.com/r/Q3GpxM0YeM"))
     
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)
@@ -159,13 +159,7 @@ def handle_message(event):
                 reply_token=event.reply_token,
                 messages=msgs
             )       
-        )
-        line_bot_api.reply_message_with_http_info(
-            ReplyMessageRequest(
-                reply_token=event.reply_token,
-                messages=[TextMessage(text="よろしければ簡単なアンケートにご協力下さい\nhttps://forms.office.com/r/Q3GpxM0YeM")]
-            )       
-        )
+        )     
                 
 @handler.add(MessageEvent, message=ImageMessageContent)
 def handle_message(event):
