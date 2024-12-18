@@ -158,13 +158,15 @@ def handle_message(event):
             ReplyMessageRequest(
                 reply_token=event.reply_token,
                 messages=msgs
-            ),
+            )       
+        )
+        line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
                 reply_token=event.reply_token,
                 messages=[TextMessage(text="よろしければ簡単なアンケートにご協力下さい\nhttps://forms.office.com/r/Q3GpxM0YeM")]
-            )            
+            )       
         )
-        
+                
 @handler.add(MessageEvent, message=ImageMessageContent)
 def handle_message(event):
     try:
