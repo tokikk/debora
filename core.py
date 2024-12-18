@@ -150,7 +150,7 @@ def handle_message(event):
                 TextMessage(text=room3_msg4)]
     else:
         return 0
-    msgs.append(TextMessage(text="よろしければ簡単なアンケートにご協力下さい\nhttps://forms.office.com/r/Q3GpxM0YeM"))
+    # msgs.append(TextMessage(text="よろしければ簡単なアンケートにご協力下さい\nhttps://forms.office.com/r/Q3GpxM0YeM"))
     
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)
@@ -158,7 +158,11 @@ def handle_message(event):
             ReplyMessageRequest(
                 reply_token=event.reply_token,
                 messages=msgs
-            )
+            ),
+            ReplyMessageRequest(
+                reply_token=event.reply_token,
+                messages=[TextMessage(text="よろしければ簡単なアンケートにご協力下さい\nhttps://forms.office.com/r/Q3GpxM0YeM")]
+            )            
         )
         
 @handler.add(MessageEvent, message=ImageMessageContent)
